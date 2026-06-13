@@ -1,10 +1,10 @@
 {
-  "name": "luma-browser",
+  "name": "@jagannathamv/luma-browser",
   "version": "0.2.0",
   "description": "CLI for controlling browsers with sandboxed JavaScript scripts",
   "type": "module",
   "bin": {
-    "luma-browser": "./bin/luma-browser.js"
+    "luma-browser": "bin/luma-browser.js"
   },
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
@@ -55,6 +55,9 @@
     "quickjs"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JagannathaReddy/luma-browser.git"

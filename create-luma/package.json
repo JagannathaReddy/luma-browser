@@ -1,10 +1,10 @@
 {
-  "name": "create-luma",
+  "name": "@jagannathamv/create-luma",
   "version": "0.2.0",
   "description": "Guided setup wizard for luma-browser",
   "type": "module",
   "bin": {
-    "create-luma": "./index.js"
+    "create-luma": "index.js"
   },
   "files": [
     "index.js",
@@ -17,6 +17,9 @@
     "wizard"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JagannathaReddy/luma-browser.git",

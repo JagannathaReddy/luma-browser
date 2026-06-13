@@ -4,6 +4,8 @@ import { spawnSync } from 'child_process';
 import { createInterface } from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 
+const LUMA_NPM_PACKAGE = '@jagannathamv/luma-browser';
+
 const args = process.argv.slice(2);
 const nonInteractive = args.includes('--yes') || args.includes('-y');
 
@@ -32,8 +34,8 @@ function lumaVersion() {
 }
 
 function npxLuma(argv) {
-  run(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['luma-browser', ...argv], {
-    label: `npx luma-browser ${argv.join(' ')}`,
+  run(process.platform === 'win32' ? 'npx.cmd' : 'npx', [LUMA_NPM_PACKAGE, ...argv], {
+    label: `npx ${LUMA_NPM_PACKAGE} ${argv.join(' ')}`,
   });
 }
 
@@ -63,20 +65,24 @@ if (hasLuma) {
   if (reinstall !== 'y' && reinstall !== 'yes') {
     console.log('Skipping global install.');
   } else {
-    run('npm', ['install', '-g', 'luma-browser'], { label: 'npm install -g luma-browser' });
+    run('npm', ['install', '-g', LUMA_NPM_PACKAGE], {
+      label: `npm install -g ${LUMA_NPM_PACKAGE}`,
+    });
     run('luma-browser', ['install'], { label: 'luma-browser install (Chromium)' });
   }
 } else {
   const installGlobal = await ask('Install luma-browser globally with npm?', 'y');
 
   if (installGlobal === 'y' || installGlobal === 'yes') {
-    run('npm', ['install', '-g', 'luma-browser'], { label: 'npm install -g luma-browser' });
+    run('npm', ['install', '-g', LUMA_NPM_PACKAGE], {
+      label: `npm install -g ${LUMA_NPM_PACKAGE}`,
+    });
     run('luma-browser', ['install'], { label: 'luma-browser install (Chromium)' });
   } else {
     console.log('\nSkipping global install. Use npx for one-off runs:');
-    console.log("  npx luma-browser install");
-    console.log("  npx luma-browser --headless <<'EOF' … EOF");
-    const installNow = await ask('Run npx luma-browser install now?', 'y');
+    console.log(`  npx ${LUMA_NPM_PACKAGE} install`);
+    console.log(`  npx ${LUMA_NPM_PACKAGE} --headless <<'EOF' … EOF`);
+    const installNow = await ask(`Run npx ${LUMA_NPM_PACKAGE} install now?`, 'y');
     if (installNow === 'y' || installNow === 'yes') {
       npxLuma(['install']);
     }

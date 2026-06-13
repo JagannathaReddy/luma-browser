@@ -4,14 +4,14 @@ luma-browser publishes two npm packages from this repository:
 
 | Package | npm name | bin | Notes |
 |---------|----------|-----|-------|
-| Main CLI | `luma-browser` | `luma-browser` | Daemon, sandbox, sessions, viewer |
-| Setup wizard | `create-luma` | `create-luma` | `npm create luma` |
+| Main CLI | `@jagannathamv/luma-browser` | `luma-browser` | Daemon, sandbox, sessions, viewer |
+| Setup wizard | `@jagannathamv/create-luma` | `create-luma` | `npm create @jagannathamv/luma` |
 
 Playwright Chromium is **not** bundled — users run `luma-browser install` (~150 MB into Playwright cache).
 
 ## Prerequisites (one-time)
 
-1. npm account with publish access to `luma-browser` and `create-luma`
+1. npm account with publish access to `@jagannathamv/luma-browser` and `@jagannathamv/create-luma`
 2. GitHub repo secret `NPM_TOKEN` — automation token with publish rights
 3. `repository` field in each `package.json` points at this repo (required for provenance)
 

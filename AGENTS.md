@@ -35,7 +35,7 @@ Artifacts: ~/.luma-browser/sessions/<id>/
 | `agents/` | JTBD subagent prompts |
 | `commands/` | Slash commands (`/luma:run`, `/luma:session`, …) |
 | `examples/` | Runnable demo scripts |
-| `create-luma/` | `npm create luma` setup wizard (separate npm package) |
+| `create-luma/` | `npm create @jagannathamv/luma` setup wizard (separate npm package) |
 | `test/` | Node test runner — unit + optional e2e (Playwright) |
 
 ## Data directories

@@ -3,7 +3,7 @@
 Guided setup for [luma-browser](https://github.com/JagannathaReddy/luma-browser).
 
 ```bash
-npm create luma@latest
+npm create @jagannathamv/luma@latest
 ```
 
 Installs `luma-browser`, downloads Chromium, and prints agent-plugin next steps.

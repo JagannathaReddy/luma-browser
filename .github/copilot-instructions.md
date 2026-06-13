@@ -40,7 +40,7 @@ Full API: `skills/luma-scripting/references/REFERENCE.md`
 ## Install
 
 ```bash
-npm install -g luma-browser
+npm install -g @jagannathamv/luma-browser
 luma-browser install
 luma-browser --help
 ```

@@ -1,7 +1,7 @@
 # luma-browser
 
 [![CI](https://github.com/JagannathaReddy/luma-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/JagannathaReddy/luma-browser/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/luma-browser.svg)](https://www.npmjs.com/package/luma-browser)
+[![npm version](https://img.shields.io/npm/v/@jagannathamv/luma-browser.svg)](https://www.npmjs.com/package/@jagannathamv/luma-browser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 CLI for controlling browsers with JavaScript scripts. Pure Node.js — no native binaries.
@@ -12,7 +12,7 @@ User scripts execute in a **QuickJS WASM sandbox** (not Node.js).
 ## Install
 
 ```bash
-npm install -g luma-browser
+npm install -g @jagannathamv/luma-browser
 luma-browser install
 npm test
 ```
@@ -20,7 +20,7 @@ npm test
 Or use the guided wizard:
 
 ```bash
-npm create luma@latest
+npm create @jagannathamv/luma@latest
 ```
 
 ## Usage

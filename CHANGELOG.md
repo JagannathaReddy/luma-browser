@@ -8,6 +8,7 @@
 - Trace fidelity: real Playwright zip decode, `getByRole`/`getByText`/locator chain export, golden fixtures
 - Agent ecosystem: doc snippets + `stitch-docs`, Codex plugin, GitHub Copilot agents (`.github/agents/`), create-luma v2, expanded examples
 - Release hardening: Biome lint, `npm pack` CI smoke, Windows e2e, `NOTICE.md`, README badges
+- npm publish as `@jagannathamv/luma-browser` (unscoped `luma-browser` blocked — too similar to `lumabrowser`)
 
 ## 0.1.0
 
