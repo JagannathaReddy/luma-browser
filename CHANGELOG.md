@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+### create-luma
+
+- Detect unwritable npm global prefix; fall back to npx instead of failing with EACCES
+- Print one-time fix for `~/.npm-global` prefix setup
+
 ## 0.2.0
 
 - CLI ergonomics: `report.html` by default on `session end`, `session abort`, `--no-report`, `--stop-daemon`, `daemon.log`

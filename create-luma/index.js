@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import { accessSync, constants } from 'fs';
+import { homedir } from 'os';
+import { join } from 'path';
 import { spawnSync } from 'child_process';
 import { createInterface } from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
@@ -28,15 +31,61 @@ function commandExists(name) {
   return spawnSync(checker, [name], { encoding: 'utf8' }).status === 0;
 }
 
-function lumaVersion() {
-  const result = spawnSync('luma-browser', ['--help'], { encoding: 'utf8' });
-  return result.status === 0;
+function npmGlobalPrefix() {
+  const result = spawnSync('npm', ['config', 'get', 'prefix'], { encoding: 'utf8' });
+  const raw = result.stdout?.trim() || '/usr/local';
+  return raw.startsWith('~') ? join(homedir(), raw.slice(1)) : raw;
 }
 
-function npxLuma(argv) {
-  run(process.platform === 'win32' ? 'npx.cmd' : 'npx', [LUMA_NPM_PACKAGE, ...argv], {
+function canInstallGlobal() {
+  const prefix = npmGlobalPrefix();
+  try {
+    accessSync(prefix, constants.W_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function printGlobalInstallHint() {
+  console.log(`
+ Global npm install needs a writable prefix (default /usr/local often requires sudo).
+
+ Fix once — user-owned global packages:
+   mkdir -p ~/.npm-global
+   npm config set prefix ~/.npm-global
+   echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.zshrc
+   source ~/.zshrc
+
+ Or skip global install and use npx:
+   npx ${LUMA_NPM_PACKAGE} install
+   npx ${LUMA_NPM_PACKAGE} --help
+`);
+}
+
+function lumaOnPath() {
+  return commandExists('luma-browser') && spawnSync('luma-browser', ['--help'], { encoding: 'utf8' }).status === 0;
+}
+
+function npxLuma(argv, { optional = false } = {}) {
+  return run(process.platform === 'win32' ? 'npx.cmd' : 'npx', [LUMA_NPM_PACKAGE, ...argv], {
     label: `npx ${LUMA_NPM_PACKAGE} ${argv.join(' ')}`,
+    optional,
   });
+}
+
+function installGlobalPackage() {
+  return run('npm', ['install', '-g', LUMA_NPM_PACKAGE], {
+    label: `npm install -g ${LUMA_NPM_PACKAGE}`,
+    optional: true,
+  });
+}
+
+function installChromium({ useGlobalCli }) {
+  if (useGlobalCli && lumaOnPath()) {
+    return run('luma-browser', ['install'], { label: 'luma-browser install (Chromium)', optional: true });
+  }
+  return npxLuma(['install']);
 }
 
 async function ask(question, defaultValue = 'y') {
@@ -52,47 +101,64 @@ async function ask(question, defaultValue = 'y') {
   return answer;
 }
 
+async function setupWithNpx() {
+  console.log('\nUsing npx (no global install).');
+  console.log(`  npx ${LUMA_NPM_PACKAGE} install`);
+  console.log(`  npx ${LUMA_NPM_PACKAGE} --headless <<'EOF' … EOF`);
+  const installNow = await ask(`Run npx ${LUMA_NPM_PACKAGE} install now?`, 'y');
+  if (installNow === 'y' || installNow === 'yes') {
+    npxLuma(['install']);
+  }
+}
+
+async function setupWithGlobalInstall() {
+  const installed = installGlobalPackage();
+  if (!installed) {
+    printGlobalInstallHint();
+    await setupWithNpx();
+    return;
+  }
+  installChromium({ useGlobalCli: true });
+}
+
 console.log(`
  luma-browser setup
  Browser automation + recorded QA sessions for coding agents
 `);
 
-const hasLuma = commandExists('luma-browser') && lumaVersion();
+const globalOk = canInstallGlobal();
+if (!globalOk) {
+  console.log('ℹ npm global prefix is not writable — will use npx unless you fix prefix (see hint below).');
+}
+
+const hasLuma = lumaOnPath();
 
 if (hasLuma) {
   console.log('✓ luma-browser is already on PATH');
   const reinstall = await ask('Reinstall / upgrade global luma-browser anyway?', 'n');
-  if (reinstall !== 'y' && reinstall !== 'yes') {
-    console.log('Skipping global install.');
+  if (reinstall === 'y' || reinstall === 'yes') {
+    await setupWithGlobalInstall();
   } else {
-    run('npm', ['install', '-g', LUMA_NPM_PACKAGE], {
-      label: `npm install -g ${LUMA_NPM_PACKAGE}`,
-    });
-    run('luma-browser', ['install'], { label: 'luma-browser install (Chromium)' });
+    installChromium({ useGlobalCli: true });
   }
 } else {
-  const installGlobal = await ask('Install luma-browser globally with npm?', 'y');
+  const defaultGlobal = globalOk && !nonInteractive ? 'y' : 'n';
+  const installGlobal = await ask('Install luma-browser globally with npm?', defaultGlobal);
 
-  if (installGlobal === 'y' || installGlobal === 'yes') {
-    run('npm', ['install', '-g', LUMA_NPM_PACKAGE], {
-      label: `npm install -g ${LUMA_NPM_PACKAGE}`,
-    });
-    run('luma-browser', ['install'], { label: 'luma-browser install (Chromium)' });
+  if ((installGlobal === 'y' || installGlobal === 'yes') && globalOk) {
+    await setupWithGlobalInstall();
   } else {
-    console.log('\nSkipping global install. Use npx for one-off runs:');
-    console.log(`  npx ${LUMA_NPM_PACKAGE} install`);
-    console.log(`  npx ${LUMA_NPM_PACKAGE} --headless <<'EOF' … EOF`);
-    const installNow = await ask(`Run npx ${LUMA_NPM_PACKAGE} install now?`, 'y');
-    if (installNow === 'y' || installNow === 'yes') {
-      npxLuma(['install']);
+    if ((installGlobal === 'y' || installGlobal === 'yes') && !globalOk) {
+      printGlobalInstallHint();
     }
+    await setupWithNpx();
   }
 }
 
 console.log(`
  Next steps
  ──────────
- • Quick test:  luma-browser run examples/example.com.js
+ • Quick test:  luma-browser run examples/example.com.js   (or npx ${LUMA_NPM_PACKAGE} run …)
  • Record QA:   bash examples/session-demo.sh
  • Full help:   luma-browser --help
 
