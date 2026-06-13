@@ -1,0 +1,68 @@
+{
+  "name": "luma-browser",
+  "version": "0.2.0",
+  "description": "CLI for controlling browsers with sandboxed JavaScript scripts",
+  "type": "module",
+  "bin": {
+    "luma-browser": "./bin/luma-browser.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "test": "node --test test/unit.test.js test/cli-parse.test.js test/session-manager.test.js test/capture.test.js test/sandbox.test.js test/playwright-rpc.test.js test/report.test.js test/trace-fidelity.test.js test/viewer.test.js test/help.test.js test/daemon-lifecycle.test.js test/docs-stitch.test.js",
+    "test:e2e": "node --test --test-concurrency=1 test/e2e.test.js test/e2e-session.test.js",
+    "test:all": "node --test test/*.test.js",
+    "check": "npm test && npm run test:e2e",
+    "lint": "biome check lib test scripts",
+    "lint:fix": "biome check --write lib test scripts",
+    "pack:check": "node scripts/pack-check.mjs",
+    "docs:stitch": "node scripts/stitch-docs.mjs",
+    "docs:check": "node scripts/stitch-docs.mjs --check",
+    "sync-version": "node scripts/sync-version.mjs"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/",
+    "skills/",
+    "agents/",
+    "commands/",
+    "rules/",
+    "examples/",
+    ".github/agents/",
+    ".github/copilot-instructions.md",
+    "plugins/",
+    "docs/",
+    ".claude-plugin/",
+    ".cursor-plugin/",
+    ".agents/",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "playwright": "1.58.2",
+    "playwright-core": "1.58.2",
+    "quickjs-emscripten": "^0.32.0",
+    "zod": "^3.25.76"
+  },
+  "keywords": [
+    "browser",
+    "automation",
+    "playwright",
+    "cli",
+    "sandbox",
+    "quickjs"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luma-browser/luma-browser.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
+}

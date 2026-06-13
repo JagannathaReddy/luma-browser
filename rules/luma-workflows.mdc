@@ -1,0 +1,20 @@
+---
+description: luma-browser workflows — when and how to use the luma skills and slash commands.
+alwaysApply: false
+---
+
+# luma-browser workflows
+
+luma-browser drives a real browser from the CLI and records verifiable QA sessions. Set up once with
+`luma-browser install`; browse sessions with `luma-browser viewer`; stop the daemon with
+`luma-browser stop`. Always run `session end --render-report` **before** `stop`.
+
+- **Verify (change → QA plan)** — read a diff, infer affected workflows, suggest flows to test.
+  Skill `luma-verify` / agent `verify-agent`. Command: `/luma:verify`.
+- **Automate (one-off)** — drive a browser and return a result, nothing recorded. Skill
+  `luma-automate` / agent `automate-agent`. Command: `/luma:run`.
+- **Session (recorded QA)** — run scripts as steps capturing trace/HAR/console → `report.html`.
+  Skill `luma-session` / agent `session-agent`. Command: `/luma:session`.
+- **Review (triage)** — open the viewer and summarize a recorded session. Skill `luma-review` /
+  agent `review-agent`. Command: `/luma:review`.
+- **Scripting API** — sandbox API in skill `luma-scripting` and `references/REFERENCE.md`.

@@ -1,0 +1,23 @@
+{
+  "name": "luma-browser",
+  "version": "0.2.0",
+  "description": "Browser automation + recorded QA sessions for OpenAI Codex: luma-scripting skills, verify/automate/session/review agents.",
+  "author": {
+    "name": "luma-browser",
+    "url": "https://github.com/luma-browser/luma-browser"
+  },
+  "homepage": "https://github.com/luma-browser/luma-browser",
+  "repository": "https://github.com/luma-browser/luma-browser",
+  "license": "MIT",
+  "keywords": [
+    "luma-browser",
+    "browser-automation",
+    "qa",
+    "codex",
+    "playwright"
+  ],
+  "skills": "../../../skills",
+  "agents": "../../../agents",
+  "commands": "../../../commands",
+  "rules": "../../../rules"
+}

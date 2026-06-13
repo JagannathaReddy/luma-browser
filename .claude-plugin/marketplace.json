@@ -1,0 +1,23 @@
+{
+  "name": "luma-browser-marketplace",
+  "owner": {
+    "name": "luma-browser",
+    "url": "https://github.com/luma-browser/luma-browser"
+  },
+  "plugins": [
+    {
+      "name": "luma-browser",
+      "source": "./",
+      "description": "Browser automation + recorded QA sessions: skills, subagents, and /luma:verify | run | session | review commands.",
+      "version": "0.2.0",
+      "category": "developer-tools",
+      "tags": [
+        "luma-browser",
+        "browser-automation",
+        "qa",
+        "skills"
+      ]
+    }
+  ],
+  "version": "0.2.0"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "luma-browser",
+  "description": "Browser automation + recorded QA sessions for Claude Code: luma-scripting reference, verify/automate/session/review skills, subagents, and /luma slash commands.",
+  "version": "0.2.0",
+  "author": {
+    "name": "luma-browser",
+    "url": "https://github.com/luma-browser/luma-browser"
+  },
+  "homepage": "https://github.com/luma-browser/luma-browser",
+  "repository": "https://github.com/luma-browser/luma-browser",
+  "license": "MIT",
+  "keywords": [
+    "luma-browser",
+    "browser-automation",
+    "qa",
+    "playwright",
+    "testing"
+  ]
+}

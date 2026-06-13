@@ -1,0 +1,22 @@
+{
+  "name": "luma-browser",
+  "version": "0.2.0",
+  "description": "luma-browser browser automation + recorded QA sessions: sandbox scripting skills, JTBD subagents, slash commands, and rules for verify, automate, session, and review workflows.",
+  "author": {
+    "name": "luma-browser"
+  },
+  "homepage": "https://github.com/luma-browser/luma-browser",
+  "repository": "https://github.com/luma-browser/luma-browser",
+  "license": "MIT",
+  "keywords": [
+    "luma-browser",
+    "browser-automation",
+    "qa",
+    "cursor",
+    "playwright"
+  ],
+  "skills": "skills",
+  "agents": "agents",
+  "commands": "commands",
+  "rules": "rules"
+}

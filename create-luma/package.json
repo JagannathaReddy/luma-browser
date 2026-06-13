@@ -1,0 +1,28 @@
+{
+  "name": "create-luma",
+  "version": "0.2.0",
+  "description": "Guided setup wizard for luma-browser",
+  "type": "module",
+  "bin": {
+    "create-luma": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "luma-browser",
+    "browser-automation",
+    "setup",
+    "wizard"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luma-browser/luma-browser.git",
+    "directory": "create-luma"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,3 @@
+- Always `luma-browser session end <id>` before `luma-browser stop` — stop aborts open sessions without a report
+- `session end` renders report.html by default; use `--no-report` to skip
+- Use `session abort <id>` to cancel an open session without a report
