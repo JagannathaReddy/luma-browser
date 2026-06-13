@@ -11,7 +11,7 @@ Thanks for your interest in luma-browser.
 ## Dev setup
 
 ```bash
-git clone https://github.com/luma-browser/luma-browser.git
+git clone https://github.com/JagannathaReddy/luma-browser.git
 cd luma-browser
 npm install
 luma-browser install          # download Chromium for e2e

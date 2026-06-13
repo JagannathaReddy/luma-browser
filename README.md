@@ -1,6 +1,6 @@
 # luma-browser
 
-[![CI](https://github.com/luma-browser/luma-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/luma-browser/luma-browser/actions/workflows/ci.yml)
+[![CI](https://github.com/JagannathaReddy/luma-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/JagannathaReddy/luma-browser/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/luma-browser.svg)](https://www.npmjs.com/package/luma-browser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -122,7 +122,7 @@ luma-browser ships an agent plugin pack (skills, subagents, slash commands):
 | Install | Command |
 |---------|---------|
 | **GitHub Copilot** | Custom agents in `.github/agents/` (`@luma-session`, …) + `.github/copilot-instructions.md` |
-| Claude Code | `/plugin marketplace add luma-browser/luma-browser` then install `luma-browser` |
+| Claude Code | `/plugin marketplace add JagannathaReddy/luma-browser` then install `luma-browser` |
 | Cursor | Install from Marketplace, or symlink: `ln -sfn "$(pwd)" ~/.cursor/plugins/local/luma-browser` |
 | Codex | Add plugin from `plugins/luma/.codex-plugin/plugin.json` |
 

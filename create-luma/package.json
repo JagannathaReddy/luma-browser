@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luma-browser/luma-browser.git",
+    "url": "git+https://github.com/JagannathaReddy/luma-browser.git",
     "directory": "create-luma"
   },
   "engines": {

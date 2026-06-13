@@ -93,11 +93,11 @@ console.log(`
  Agent plugins (pick your editor):
  • GitHub Copilot — custom agents in .github/agents/ (luma-automate, luma-session, …)
                    + .github/copilot-instructions.md for repo context
- • Claude Code   — /plugin marketplace add luma-browser/luma-browser
+ • Claude Code   — /plugin marketplace add JagannathaReddy/luma-browser
  • Cursor        — install "luma-browser" from Marketplace
  • Codex         — plugins/luma/.codex-plugin/plugin.json
 
- Docs: https://github.com/luma-browser/luma-browser
+ Docs: https://github.com/JagannathaReddy/luma-browser
 `);
 
 if (rl) {

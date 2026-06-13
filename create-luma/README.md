@@ -1,6 +1,6 @@
 # create-luma
 
-Guided setup for [luma-browser](https://github.com/luma-browser/luma-browser).
+Guided setup for [luma-browser](https://github.com/JagannathaReddy/luma-browser).
 
 ```bash
 npm create luma@latest
