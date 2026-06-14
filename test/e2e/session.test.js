@@ -5,7 +5,7 @@ import { describe, it } from 'node:test';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const cli = join(projectRoot, 'bin/luma-browser.js');
 const skip = process.env.LUMA_BROWSER_SKIP_E2E === '1';
 

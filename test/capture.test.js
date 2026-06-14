@@ -98,11 +98,12 @@ describe('writeSessionResults', () => {
         ],
       };
 
-      const results = await writeSessionResults(root, meta);
+      const { path, results } = await writeSessionResults(root, meta);
+      assert.equal(path, join(root, 'results.json'));
       assert.equal(results.steps.length, 1);
       assert.equal(results.steps[0].artifacts.trace, 'trace.zip');
 
-      const raw = JSON.parse(await readFile(join(root, 'results.json'), 'utf8'));
+      const raw = JSON.parse(await readFile(path, 'utf8'));
       assert.equal(raw.id, sessionId);
       assert.equal(raw.steps[0].dir, 'steps/000');
     } finally {

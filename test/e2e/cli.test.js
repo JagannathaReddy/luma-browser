@@ -4,7 +4,7 @@ import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const cli = join(projectRoot, 'bin', 'luma-browser.js');
 
 function sleep(ms) {
