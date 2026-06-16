@@ -5,7 +5,9 @@ import { platform } from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = join(__dirname, '..');
+// Source lives at scripts/postinstall.ts; compiled output at dist/scripts/postinstall.js.
+// Two levels up from dist/scripts/ brings us back to the project root.
+const projectRoot = join(__dirname, '../..');
 const packageJson = JSON.parse(readFileSync(join(projectRoot, 'package.json'), 'utf8'));
 const packageName = packageJson.name;
 function shouldFailInstall() {
