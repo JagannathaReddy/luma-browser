@@ -36,7 +36,9 @@ test('exportPlaywrightScript golden fixture snapshot', async () => {
   const actions = await decodeTraceZip(join(fixturesDir, 'example-flow.trace.zip'));
   const script = exportPlaywrightScript(actions, { stepName: 'flow' });
   // Normalize CRLF → LF so the comparison is platform-independent.
-  const expected = (await readFile(join(fixturesDir, 'example-flow.exported.spec.js'), 'utf8')).replace(/\r\n/g, '\n');
+  const expected = (
+    await readFile(join(fixturesDir, 'example-flow.exported.spec.js'), 'utf8')
+  ).replace(/\r\n/g, '\n');
 
   assert.equal(script, expected);
 });
