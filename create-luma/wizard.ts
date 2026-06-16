@@ -160,7 +160,9 @@ function Wizard({ nonInteractive }) {
         : null,
       React.createElement(SelectInput, {
         items: [
-          { label: 'Install globally with npm (recommended)', value: 'global', disabled: !globalOk },
+          ...(globalOk
+            ? [{ label: 'Install globally with npm (recommended)', value: 'global' }]
+            : []),
           { label: 'Use npx (no global install)', value: 'npx' },
         ],
         onSelect: (item) => {

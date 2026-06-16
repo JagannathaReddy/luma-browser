@@ -2,6 +2,7 @@ import net from 'node:net';
 import { getSocketPath } from '@jagannathamv/config/paths';
 import { PROTOCOL_VERSION, serializeRequest, } from '@jagannathamv/protocol';
 import { readLines } from './line-reader.js';
+export { readLines } from './line-reader.js';
 export function isDaemonRunning() {
     return probeDaemon(getSocketPath());
 }
@@ -22,14 +23,18 @@ export function sendRequest(request, options = {}) {
     return new Promise((resolve, reject) => {
         const socket = net.connect(endpoint);
         let result = null;
-        let failed = false;
-        const fail = (error) => {
-            if (failed) {
+        let settled = false;
+        const settle = (fn) => {
+            if (settled)
                 return;
-            }
-            failed = true;
-            socket.destroy();
-            reject(error instanceof Error ? error : new Error(String(error)));
+            settled = true;
+            fn();
+        };
+        const fail = (error) => {
+            settle(() => {
+                socket.destroy();
+                reject(error instanceof Error ? error : new Error(String(error)));
+            });
         };
         socket.setEncoding('utf8');
         socket.on('error', fail);
@@ -54,6 +59,11 @@ export function sendRequest(request, options = {}) {
                     return;
                 }
             }
+            // Ignore messages that belong to a different request (should not happen
+            // on a single-request-per-connection protocol, but guards against bugs).
+            if (message.id !== undefined && message.id !== request.id) {
+                return;
+            }
             switch (message.type) {
                 case 'stdout':
                     onStdout(String(message.data ?? ''));
@@ -66,7 +76,7 @@ export function sendRequest(request, options = {}) {
                     break;
                 case 'complete':
                     socket.end();
-                    resolve(result);
+                    settle(() => resolve(result));
                     break;
                 case 'error':
                     fail(new Error(String(message.message ?? 'Unknown daemon error')));
@@ -76,9 +86,7 @@ export function sendRequest(request, options = {}) {
             }
         });
         socket.on('close', () => {
-            if (!failed) {
-                resolve(result);
-            }
+            settle(() => resolve(result));
         });
     });
 }

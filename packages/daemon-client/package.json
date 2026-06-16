@@ -17,6 +17,9 @@
     "@jagannathamv/config": "*",
     "@jagannathamv/protocol": "*"
   },
+  "devDependencies": {
+    "@types/node": "^22.15.21"
+  },
   "publishConfig": {
     "access": "public"
   },

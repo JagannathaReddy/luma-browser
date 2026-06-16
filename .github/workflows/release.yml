@@ -40,6 +40,42 @@ jobs:
 
       - run: npm run check
 
+      - name: Publish @jagannathamv/protocol
+        working-directory: packages/protocol
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @jagannathamv/config
+        working-directory: packages/config
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @jagannathamv/logger
+        working-directory: packages/logger
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @jagannathamv/cli-kit
+        working-directory: packages/cli-kit
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @jagannathamv/daemon-client
+        working-directory: packages/daemon-client
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @jagannathamv/viewer-ui
+        working-directory: packages/viewer-ui
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish luma-browser
         run: npm publish --access public --provenance
         env:

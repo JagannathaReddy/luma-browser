@@ -1,4 +1,4 @@
-import net from 'net';
+import net from 'node:net';
 export declare function createServer({ router, logger, paths, lifecycle }: {
     router: any;
     logger: any;

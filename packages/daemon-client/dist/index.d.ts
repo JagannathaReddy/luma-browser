@@ -1,4 +1,5 @@
 import { type Request, type RequestResult } from '@jagannathamv/protocol';
+export { readLines } from './line-reader.js';
 export interface SendRequestOptions {
     onStdout?: (data: string) => void;
     onStderr?: (data: string) => void;

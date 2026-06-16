@@ -8,6 +8,7 @@ import {
   type RequestType,
 } from '@jagannathamv/protocol';
 import { readLines } from './line-reader.js';
+export { readLines } from './line-reader.js';
 
 export interface SendRequestOptions {
   onStdout?: (data: string) => void;
@@ -44,15 +45,19 @@ export function sendRequest<T extends Request>(
   return new Promise((resolve, reject) => {
     const socket = net.connect(endpoint);
     let result: RequestResult<RequestType> | null = null;
-    let failed = false;
+    let settled = false;
+
+    const settle = (fn: () => void) => {
+      if (settled) return;
+      settled = true;
+      fn();
+    };
 
     const fail = (error: unknown) => {
-      if (failed) {
-        return;
-      }
-      failed = true;
-      socket.destroy();
-      reject(error instanceof Error ? error : new Error(String(error)));
+      settle(() => {
+        socket.destroy();
+        reject(error instanceof Error ? error : new Error(String(error)));
+      });
     };
 
     socket.setEncoding('utf8');
@@ -65,7 +70,13 @@ export function sendRequest<T extends Request>(
 
     let versionChecked = false;
     readLines(socket, (line) => {
-      let message: { type: string; protocolVersion?: number; data?: unknown; message?: string };
+      let message: {
+        type: string;
+        id?: string;
+        protocolVersion?: number;
+        data?: unknown;
+        message?: string;
+      };
       try {
         message = JSON.parse(line) as typeof message;
       } catch (error) {
@@ -88,6 +99,12 @@ export function sendRequest<T extends Request>(
         }
       }
 
+      // Ignore messages that belong to a different request (should not happen
+      // on a single-request-per-connection protocol, but guards against bugs).
+      if (message.id !== undefined && message.id !== request.id) {
+        return;
+      }
+
       switch (message.type) {
         case 'stdout':
           onStdout(String(message.data ?? ''));
@@ -100,7 +117,7 @@ export function sendRequest<T extends Request>(
           break;
         case 'complete':
           socket.end();
-          resolve(result as RequestResult<T['type']> | null);
+          settle(() => resolve(result as RequestResult<T['type']> | null));
           break;
         case 'error':
           fail(new Error(String(message.message ?? 'Unknown daemon error')));
@@ -111,9 +128,7 @@ export function sendRequest<T extends Request>(
     });
 
     socket.on('close', () => {
-      if (!failed) {
-        resolve(result as RequestResult<T['type']> | null);
-      }
+      settle(() => resolve(result as RequestResult<T['type']> | null));
     });
   });
 }

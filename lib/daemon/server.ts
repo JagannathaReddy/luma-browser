@@ -1,5 +1,5 @@
-import net from 'net';
-import { readLines } from '../line-reader.js';
+import net from 'node:net';
+import { readLines } from '@jagannathamv/daemon-client';
 import { parseRequest, serializeResponse } from '../protocol.js';
 import { createSocketOutput, writeFatalError } from './output.js';
 
