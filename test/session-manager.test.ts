@@ -15,7 +15,7 @@ test('SessionManager start/list/end lifecycle', async () => {
 
     const { stepIndex, stepDir } = await manager.beginStep(started.sessionId, 'open');
     assert.equal(stepIndex, 0);
-    assert.match(stepDir, /steps\/000$/);
+    assert.match(stepDir, /steps[/\\]000$/);
 
     await manager.finishStep(started.sessionId, stepIndex, { success: true });
 

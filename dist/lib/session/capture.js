@@ -369,7 +369,7 @@ export async function writeSessionResults(sessionDir, meta) {
             endedAt: step.endedAt,
             success: step.success,
             error: step.error ?? null,
-            dir: join('steps', String(index).padStart(3, '0')),
+            dir: `steps/${String(index).padStart(3, '0')}`,
             artifacts: step.artifacts ?? {},
         })),
     });

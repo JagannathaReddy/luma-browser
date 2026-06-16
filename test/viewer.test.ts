@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { tmpdir } from 'os';
 import { test } from 'node:test';
 import { randomUUID } from 'crypto';
@@ -20,7 +20,9 @@ test('resolveSessionFile blocks path traversal', () => {
   const root = '/tmp/sessions';
   const sessionId = '550e8400-e29b-41d4-a716-446655440000';
   const resolved = resolveSessionFile(root, sessionId, 'steps/000/screenshot.png');
-  assert.equal(resolved, join(root, sessionId, 'steps/000/screenshot.png'));
+  // resolveSessionFile uses path.resolve() internally, so the expected value must
+  // also be resolved — on Windows this adds the drive letter (e.g. D:\tmp\...).
+  assert.equal(resolved, resolve(root, sessionId, 'steps/000/screenshot.png'));
   assert.throws(() => resolveSessionFile(root, sessionId, '../../secret.txt'));
 });
 

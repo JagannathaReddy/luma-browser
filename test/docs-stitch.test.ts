@@ -21,7 +21,7 @@ test('GitHub Copilot agents exist', () => {
   for (const name of agents) {
     const path = join(root, '.github/agents', `${name}.agent.md`);
     const content = readFileSync(path, 'utf8');
-    assert.match(content, /^---\n/);
+    assert.match(content, /^---\r?\n/);
     assert.match(content, /description:/);
     assert.match(content, new RegExp(`name: ${name}`));
   }
