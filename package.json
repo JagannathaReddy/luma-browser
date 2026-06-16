@@ -3,26 +3,61 @@
   "version": "0.2.0",
   "description": "CLI for controlling browsers with sandboxed JavaScript scripts",
   "type": "module",
+  "packageManager": "npm@11.12.1",
+  "workspaces": [
+    "packages/*",
+    "create-luma"
+  ],
+  "main": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js"
+    },
+    "./protocol": {
+      "types": "./dist/lib/protocol.d.ts",
+      "import": "./dist/lib/protocol.js"
+    },
+    "./daemon-client": {
+      "types": "./dist/lib/daemon-client.d.ts",
+      "import": "./dist/lib/daemon-client.js"
+    },
+    "./daemon-lifecycle": {
+      "types": "./dist/lib/daemon-lifecycle.d.ts",
+      "import": "./dist/lib/daemon-lifecycle.js"
+    },
+    "./viewer": {
+      "types": "./dist/lib/viewer/index.d.ts",
+      "import": "./dist/lib/viewer/index.js"
+    },
+    "./limits": {
+      "types": "./dist/lib/limits.d.ts",
+      "import": "./dist/lib/limits.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
-    "luma-browser": "bin/luma-browser.js"
+    "luma": "dist/bin/luma.js",
+    "luma-browser": "dist/bin/luma-browser.js"
   },
   "scripts": {
-    "postinstall": "node scripts/postinstall.js",
-    "test": "node --test test/*.test.js",
-    "test:e2e": "node --test --test-concurrency=1 test/e2e/*.test.js",
-    "test:all": "node --test test/*.test.js test/e2e/*.test.js",
+    "postinstall": "node dist/scripts/postinstall.js",
+    "build": "turbo run build && npm run build:local && chmod +x dist/bin/luma.js dist/bin/luma-browser.js",
+    "build:local": "tsc",
+    "test": "npm run build && tsx --test test/*.test.ts",
+    "test:e2e": "npm run build && tsx --test --test-concurrency=1 test/e2e/*.test.ts",
+    "test:all": "npm run build && tsx --test test/*.test.ts test/e2e/*.test.ts",
     "check": "npm test && npm run test:e2e",
-    "lint": "biome check lib test scripts",
-    "lint:fix": "biome check --write lib test scripts",
-    "pack:check": "node scripts/pack-check.mjs",
-    "docs:stitch": "node scripts/stitch-docs.mjs",
-    "docs:check": "node scripts/stitch-docs.mjs --check",
-    "sync-version": "node scripts/sync-version.mjs"
+    "lint": "biome check lib test scripts bin packages",
+    "lint:fix": "biome check --write lib test scripts bin packages",
+    "pack:check": "tsx scripts/pack-check.ts",
+    "docs:stitch": "tsx scripts/stitch-docs.ts",
+    "docs:check": "tsx scripts/stitch-docs.ts --check",
+    "sync-version": "tsx scripts/sync-version.ts"
   },
   "files": [
-    "bin/",
-    "lib/",
-    "scripts/",
+    "dist/",
     "skills/",
     "agents/",
     "commands/",
@@ -41,6 +76,12 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
+    "@jagannathamv/cli-kit": "*",
+    "@jagannathamv/config": "*",
+    "@jagannathamv/daemon-client": "*",
+    "@jagannathamv/logger": "*",
+    "@jagannathamv/protocol": "*",
+    "@jagannathamv/viewer-ui": "*",
     "playwright": "1.58.2",
     "playwright-core": "1.58.2",
     "quickjs-emscripten": "^0.32.0",
@@ -66,6 +107,10 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4"
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.15.21",
+    "tsx": "^4.22.4",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
   }
 }

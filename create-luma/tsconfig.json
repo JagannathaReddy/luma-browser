@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "allowJs": false,
+    "jsx": "preserve",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
+  },
+  "include": ["index.ts", "wizard.ts", "lib/**/*.ts"]
+}

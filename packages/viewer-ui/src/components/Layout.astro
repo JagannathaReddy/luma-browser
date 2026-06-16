@@ -1,0 +1,28 @@
+---
+import '../styles/viewer.css';
+
+interface Props {
+  title: string;
+  version?: string;
+  footer?: string;
+}
+
+const { title, version, footer } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <slot />
+      {footer ? <p class="muted">{footer}</p> : null}
+      {version ? <p class="muted">Viewer {version}</p> : null}
+    </div>
+    <slot name="scripts" />
+  </body>
+</html>

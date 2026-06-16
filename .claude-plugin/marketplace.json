@@ -16,7 +16,8 @@
         "browser-automation",
         "qa",
         "skills"
-      ]
+      ],
+      "autoUpdate": true
     }
   ],
   "version": "0.2.0"

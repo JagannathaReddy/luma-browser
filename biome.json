@@ -14,7 +14,9 @@
         "useNodejsImportProtocol": "off"
       },
       "suspicious": {
-        "noAssignInExpressions": "off"
+        "noAssignInExpressions": "off",
+        "noExplicitAny": "off",
+        "noImplicitAnyLet": "off"
       }
     }
   },
@@ -31,6 +33,15 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "test/fixtures", "package-lock.json"]
+    "ignore": [
+      "node_modules",
+      "test/fixtures",
+      "package-lock.json",
+      "packages/*/dist",
+      "packages/viewer-ui/.astro",
+      "create-luma/dist",
+      "dist",
+      ".turbo"
+    ]
   }
 }

@@ -17,7 +17,14 @@ luma-browser install
 npm test
 ```
 
-Or use the guided wizard:
+Two binaries ship in the same package:
+
+| Binary | Role |
+|--------|------|
+| `luma-browser` | **Engine** — run scripts (stdin or files) |
+| `luma` | **Orchestrator** — sessions, viewer, daemon lifecycle |
+
+Or use the Ink-based guided wizard:
 
 ```bash
 npm create @jagannathamv/luma@latest
@@ -100,6 +107,32 @@ luma-browser --headless <<'EOF'
 EOF
 ```
 
+## Security model
+
+luma-browser is a single-user local-developer tool. The daemon socket
+(`~/.luma-browser/daemon.sock`) is **trusted-local**: any process running under
+your UID can issue commands, including scripts that drive Playwright against
+your authenticated browser profiles under `~/.luma-browser/browsers/`.
+
+Implications:
+
+- Do not run luma-browser as a privileged user, and do not run untrusted
+  processes under the same UID while the daemon is up.
+- Do not expose `~/.luma-browser/` over a shared filesystem, network mount, or
+  multi-tenant container.
+- The daemon socket and PID file are created with default umask; treat
+  `~/.luma-browser/` as a credential directory.
+- The local viewer at `http://127.0.0.1:<port>/` is token-gated. The token is
+  generated per `luma-browser viewer` invocation, printed in the URL, and never
+  written to disk. Don't paste viewer URLs into shared chats — they grant read
+  access to recorded sessions (which may contain auth headers in HARs).
+
+QuickJS scripts run in a memory- and CPU-bounded WASM sandbox; they cannot
+access Node `fs`/`process`/`require`, and string arguments to `page.evaluate`
+are evaluated in the **browser context**, not on the host. The sandbox refuses
+property paths like `constructor`, `__proto__`, or anything beginning with
+`__`. See `skills/luma-scripting/SKILL.md` for the full surface.
+
 ## Development
 
 ```bash
@@ -115,9 +148,28 @@ See [AGENTS.md](./AGENTS.md) for architecture, [CONTRIBUTING.md](./CONTRIBUTING.
 
 Set `LUMA_BROWSER_SKIP_E2E=1` to skip browser e2e tests.
 
+## Publishable packages
+
+The repo is an npm workspace monorepo (Turborepo build graph). These packages are published for third-party tooling:
+
+| Package | Purpose |
+|---------|---------|
+| `@jagannathamv/protocol` | Zod-validated IPC types with discriminated request→result maps |
+| `@jagannathamv/config` | Data paths and runtime limits |
+| `@jagannathamv/logger` | Structured stderr logging |
+| `@jagannathamv/daemon-client` | Typed Unix-socket daemon client |
+| `@jagannathamv/cli-kit` | CLI help text and binary mode routing |
+| `@jagannathamv/viewer-ui` | Astro-based session viewer components |
+
+The main `@jagannathamv/luma-browser` package re-exports subpaths (`/protocol`, `/daemon-client`, …) for backward compatibility.
+
+Build all packages: `npm run build` (runs Turborepo).
+
 ## Agent integration
 
-luma-browser ships an agent plugin pack (skills, subagents, slash commands):
+luma-browser ships an agent plugin pack (skills, subagents, slash commands).
+
+**Plugin auto-update:** marketplace manifests (`.claude-plugin/marketplace.json`, `.cursor-plugin/plugin.json`, Codex plugin) are version-synced on every release via `scripts/sync-version.mjs`. Claude Code, Cursor, and Codex detect newer plugin versions automatically — reinstall only if your editor caches an old marketplace snapshot.
 
 | Install | Command |
 |---------|---------|

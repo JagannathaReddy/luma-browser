@@ -1,17 +1,25 @@
 # Releasing
 
-luma-browser publishes two npm packages from this repository:
+luma-browser publishes npm packages from this monorepo workspace:
 
-| Package | npm name | bin | Notes |
-|---------|----------|-----|-------|
-| Main CLI | `@jagannathamv/luma-browser` | `luma-browser` | Daemon, sandbox, sessions, viewer |
-| Setup wizard | `@jagannathamv/create-luma` | `create-luma` | `npm create @jagannathamv/luma` |
+| Package | npm name | Role |
+|---------|----------|------|
+| Main CLI | `@jagannathamv/luma-browser` | `luma` + `luma-browser` binaries, daemon, sandbox, sessions |
+| Setup wizard | `@jagannathamv/create-luma` | Ink-based `npm create @jagannathamv/luma` |
+| Protocol | `@jagannathamv/protocol` | Zod IPC + discriminated result types (TypeScript) |
+| Config | `@jagannathamv/config` | Paths + runtime limits |
+| Logger | `@jagannathamv/logger` | Structured stderr logging |
+| Daemon client | `@jagannathamv/daemon-client` | Typed Unix-socket client |
+| CLI kit | `@jagannathamv/cli-kit` | Help text + binary mode routing |
+| Viewer UI | `@jagannathamv/viewer-ui` | Astro session viewer components |
+
+Build all packages before pack/publish: `npm run build` (Turborepo).
 
 Playwright Chromium is **not** bundled — users run `luma-browser install` (~150 MB into Playwright cache).
 
 ## Prerequisites (one-time)
 
-1. npm account with publish access to `@jagannathamv/luma-browser` and `@jagannathamv/create-luma`
+1. npm account with publish access to all `@jagannathamv/*` packages listed above
 2. GitHub repo secret `NPM_TOKEN` — automation token with publish rights
 3. `repository` field in each `package.json` points at this repo (required for provenance)
 
@@ -25,8 +33,7 @@ node scripts/sync-version.mjs 0.2.0
 
 Updates:
 
-- `package.json`
-- `create-luma/package.json`
+- `package.json` and each `packages/*/package.json`
 - `.claude-plugin/marketplace.json` and `plugin.json`
 - `.cursor-plugin/plugin.json`
 - `plugins/luma/.codex-plugin/plugin.json`

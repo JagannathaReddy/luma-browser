@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Types
+
+- Turn on `strictNullChecks` in `tsconfig.json` so null/undefined misuse is caught at build time
+- Replace every `: any` annotation in `lib/`, `bin/`, `scripts/`, and `create-luma/` with real interfaces, anchored on the published `@jagannathamv/protocol` and `@jagannathamv/daemon-client` types
+- New local type modules: `lib/types.ts`, `lib/session/types.ts`, `lib/daemon/types.ts`, `lib/viewer/types.ts`, `create-luma/lib/types.ts`
+- Deliberate follow-up: `noImplicitAny` remains off — flipping it surfaces ~470 untyped parameters left over from the JS migration and is its own cleanup pass
+
 ## 0.2.1
 
 ### create-luma

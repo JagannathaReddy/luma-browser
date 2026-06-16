@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    // strict is enabled piecewise: strictNullChecks is on, noImplicitAny is a
+    // follow-up cleanup. See CHANGELOG "Types" section under Unreleased.
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noImplicitThis": false,
+    "strictFunctionTypes": false,
+    "alwaysStrict": false,
+    "useUnknownInCatchVariables": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowJs": false,
+    "checkJs": false,
+    "resolveJsonModule": true
+  },
+  "include": ["lib/**/*.ts", "bin/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules", "dist", "packages", "test", "create-luma"]
+}

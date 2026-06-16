@@ -1,0 +1,1 @@
+{"version":3,"file":"quickjs-sandbox.d.ts","sourceRoot":"","sources":["../../../lib/sandbox/quickjs-sandbox.ts"],"names":[],"mappings":"AA+BA,OAAO,KAAK,EAAE,oBAAoB,EAAE,MAAM,aAAa,CAAC;AAOxD,wBAAsB,kBAAkB,CACtC,MAAM,KAAA,EACN,EACE,OAAO,EACP,QAA+C,EAC/C,QAA+C,EAC/C,SAAmC,EACnC,gBAA4C,GAC7C,GAAE,oBAAoB,GAAG;IAAE,OAAO,CAAC,EAAE,OAAO,CAAA;CAAO,iBAgCrD"}

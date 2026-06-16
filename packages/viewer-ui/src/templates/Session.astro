@@ -1,0 +1,145 @@
+---
+import { join } from 'node:path';
+import Layout from '../components/Layout.astro';
+import { escapeHtml, formatDuration, formatWhen } from '../lib/format.ts';
+import type { RenderSessionOptions, ViewerSessionDetail, ViewerStep } from '../lib/types.ts';
+
+interface Props {
+  detail: ViewerSessionDetail;
+  sessionsDir: string;
+  version: string;
+}
+
+const { detail, sessionsDir, version } = Astro.props as Props & RenderSessionOptions;
+
+const passed = detail.steps.filter((step) => step.success === true).length;
+const failed = detail.steps.filter((step) => step.success === false).length;
+
+const ARTIFACT_LINKS: Array<[string, string | null]> = [
+  ['trace', 'trace.zip'],
+  ['har', 'network.har'],
+  ['console', 'console.jsonl'],
+  ['screenshot', 'screenshot.png'],
+  ['video', 'video.webm'],
+  ['exportedScript', null],
+];
+
+function stepStatusClass(success: boolean | null | undefined): string {
+  if (success === true) return 'pass';
+  if (success === false) return 'fail';
+  return 'unknown';
+}
+
+function stepStatusLabel(success: boolean | null | undefined): string {
+  if (success === true) return 'PASS';
+  if (success === false) return 'FAIL';
+  return '—';
+}
+
+function buildArtifactLinks(sessionId: string, step: ViewerStep): string {
+  const links: string[] = [];
+  for (const [key, fallbackName] of ARTIFACT_LINKS) {
+    const fileName = step.artifacts?.[key] ?? fallbackName;
+    if (!fileName) continue;
+    const href = `/session/${sessionId}/${join(step.dir, fileName).replace(/\\/g, '/')}`;
+    links.push(`<a href="${escapeHtml(href)}">${escapeHtml(fileName)}</a>`);
+  }
+  return links.length > 0 ? links.join(' · ') : '<span class="muted">No artifacts</span>';
+}
+
+function buildTraceCommand(sessionDir: string, step: ViewerStep): string {
+  const traceName = step.artifacts?.trace;
+  if (!traceName) return '';
+  const absolutePath = join(sessionDir, step.dir, traceName);
+  return `<div class="trace-cmd" title="Copy and run locally">npx playwright show-trace ${escapeHtml(absolutePath)}</div>`;
+}
+---
+
+<Layout
+  title={detail.name ? `${detail.name} — luma-browser` : 'Session detail — luma-browser'}
+  footer={`Viewer ${version} · ${sessionsDir}`}
+>
+  <p><a href="/">← All sessions</a></p>
+  <h1>{detail.name ?? 'Untitled session'}</h1>
+  <p class="muted mono">{detail.id}</p>
+  <div class="meta">
+    <span class="pill"><span class={`badge ${detail.status}`}>{detail.status}</span></span>
+    <span class="pill">Browser {detail.browser ?? 'default'}</span>
+    <span class="pill">{passed} passed · {failed} failed · {detail.steps.length} steps</span>
+    <span class="pill">Duration {formatDuration(detail.startedAt, detail.endedAt)}</span>
+    <span class="pill">{formatWhen(detail.startedAt)} → {formatWhen(detail.endedAt)}</span>
+  </div>
+
+  <section>
+    <h2>Report</h2>
+    {detail.reportReady ? (
+      <>
+        <div class="toolbar">
+          <a class="btn primary" href={`/session/${detail.id}/report.html`} target="_blank" rel="noopener">
+            Open report in new tab
+          </a>
+          <a class="btn" href="#report-embed">View embedded below</a>
+        </div>
+        <iframe
+          id="report-embed"
+          class="report-frame"
+          src={`/session/${detail.id}/report.html`}
+          title="Session report"
+        />
+      </>
+    ) : (
+      <p class="empty">
+        No <code>report.html</code> yet. Close the session with{' '}
+        <code>luma session end {detail.id}</code>.
+      </p>
+    )}
+  </section>
+
+  <section>
+    <h2>Steps</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Status</th>
+          <th>Duration</th>
+          <th>Actions</th>
+          <th>Artifacts</th>
+        </tr>
+      </thead>
+      <tbody>
+        {detail.steps.length === 0 ? (
+          <tr>
+            <td colspan="5" class="muted">No steps recorded yet.</td>
+          </tr>
+        ) : (
+          detail.steps.map((step) => (
+            <tr>
+              <td>
+                <strong>{step.name}</strong>
+                <div class="muted mono">{step.dir}</div>
+              </td>
+              <td>
+                <span class={`badge ${stepStatusClass(step.success)}`}>
+                  {stepStatusLabel(step.success)}
+                </span>
+              </td>
+              <td>{formatDuration(step.startedAt, step.endedAt)}</td>
+              <td>{step.actionCount ?? '—'}</td>
+              <td>
+                <Fragment set:html={buildArtifactLinks(detail.id, step)} />
+                {step.artifacts?.trace ? (
+                  <details>
+                    <summary class="muted">Open in Playwright</summary>
+                    <Fragment set:html={buildTraceCommand(detail.dir, step)} />
+                  </details>
+                ) : null}
+                {step.error ? <pre class="error">{step.error}</pre> : null}
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </section>
+</Layout>

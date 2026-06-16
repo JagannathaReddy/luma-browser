@@ -1,0 +1,105 @@
+---
+import Layout from '../components/Layout.astro';
+import { formatWhen, sessionSearchText } from '../lib/format.ts';
+import type { RenderIndexOptions, ViewerSessionSummary } from '../lib/types.ts';
+
+interface Props {
+  sessions: ViewerSessionSummary[];
+  sessionsDir: string;
+  version: string;
+}
+
+const { sessions, sessionsDir, version } = Astro.props as Props & RenderIndexOptions;
+
+function statusClass(status: string): string {
+  if (status === 'open') return 'open';
+  if (status === 'aborted') return 'aborted';
+  return 'closed';
+}
+---
+
+<Layout
+  title="luma-browser sessions"
+  version={`${version} · ${sessions.length} session${sessions.length === 1 ? '' : 's'}`}
+>
+  <h1>luma-browser sessions</h1>
+
+  {sessions.length === 0 ? (
+    <p class="empty">
+      No sessions found in <code>{sessionsDir}</code>. Start one with{' '}
+      <code>luma session start --name demo</code>.
+    </p>
+  ) : (
+    <>
+      <div class="toolbar">
+        <input
+          type="search"
+          id="session-search"
+          placeholder="Filter by name, id, status, or date…"
+          aria-label="Filter sessions"
+        />
+      </div>
+      <p id="search-empty" class="empty hidden">No sessions match your search.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Session</th>
+            <th>Status</th>
+            <th>Steps</th>
+            <th>Started</th>
+            <th>Ended</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sessions.map((session) => (
+            <tr data-session-row data-search={sessionSearchText(session)}>
+              <td>
+                {session.name ? session.name : <span class="muted">Untitled session</span>}
+                <div class="muted mono">{session.id}</div>
+              </td>
+              <td>
+                <span class={`badge ${statusClass(session.status)}`}>{session.status}</span>
+              </td>
+              <td>{session.stepCount}</td>
+              <td>{formatWhen(session.startedAt)}</td>
+              <td>{formatWhen(session.endedAt)}</td>
+              <td>
+                <a href={`/session/${session.id}/`}>View session</a>
+                {' · '}
+                {session.reportReady ? (
+                  <a href={`/session/${session.id}/report.html`}>Open report</a>
+                ) : (
+                  <span class="muted">No report</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+
+  <Fragment slot="scripts">
+    <script is:inline>
+      (function () {
+        var input = document.getElementById('session-search');
+        if (!input) return;
+        var rows = Array.prototype.slice.call(document.querySelectorAll('[data-session-row]'));
+        var empty = document.getElementById('search-empty');
+        function filter() {
+          var query = input.value.trim().toLowerCase();
+          var visible = 0;
+          rows.forEach(function (row) {
+            var haystack = (row.getAttribute('data-search') || '').toLowerCase();
+            var show = !query || haystack.indexOf(query) !== -1;
+            row.classList.toggle('hidden', !show);
+            if (show) visible += 1;
+          });
+          if (empty) empty.classList.toggle('hidden', visible > 0 || rows.length === 0);
+        }
+        input.addEventListener('input', filter);
+      })();
+    </script>
+  </Fragment>
+</Layout>

@@ -4,12 +4,17 @@ Entry point for AI agents (and humans new to the repo).
 
 ## What luma-browser is
 
-luma-browser is a **single-package Node.js CLI** for agent-driven browser automation and recorded QA sessions. One command (`luma-browser`) covers:
+luma-browser is an **npm workspace monorepo** for agent-driven browser automation and recorded QA sessions. Two binaries ship together:
 
-1. **One-off automation** — stdin scripts or `luma-browser run` against a persistent daemon + QuickJS sandbox
-2. **Recorded QA sessions** — `session start` → step scripts → `session end` → `report.html`
-3. **Local viewer** — `luma-browser viewer` serves session index + artifacts over HTTP
-4. **Agent plugin pack** — `skills/`, `agents/`, `commands/` for Claude Code, Cursor, and Codex
+| Binary | Role |
+|--------|------|
+| `luma-browser` | **Engine** — stdin scripts or `luma-browser run` against daemon + QuickJS sandbox |
+| `luma` | **Orchestrator** — `session`, `viewer`, daemon lifecycle |
+
+1. **One-off automation** — `luma-browser` (engine)
+2. **Recorded QA sessions** — `luma session start` → `luma-browser` steps → `luma session end` → `report.html`
+3. **Local viewer** — `luma viewer` (Astro UI via `@jagannathamv/viewer-ui`)
+4. **Agent plugin pack** — `skills/`, `agents/`, `commands/` (marketplace auto-update on release)
 
 ```
 CLI (lib/cli.js)  →  daemon (lib/daemon.js)  →  BrowserManager + SessionManager + QuickJS sandbox
@@ -21,22 +26,30 @@ Artifacts: ~/.luma-browser/sessions/<id>/
 
 | Path | Role |
 |------|------|
-| `bin/luma-browser.js` | CLI entry |
+| `bin/luma.js` | Orchestrator CLI entry |
+| `bin/luma-browser.js` | Engine CLI entry |
+| `packages/protocol` | `@jagannathamv/protocol` — Zod IPC + discriminated result types (TypeScript) |
+| `packages/daemon-client` | `@jagannathamv/daemon-client` — typed socket client |
+| `packages/config` | `@jagannathamv/config` — paths + limits |
+| `packages/logger` | `@jagannathamv/logger` |
+| `packages/cli-kit` | `@jagannathamv/cli-kit` — help text + binary routing |
+| `packages/viewer-ui` | `@jagannathamv/viewer-ui` — Astro viewer components |
 | `lib/daemon.js` | Background daemon — line-delimited JSON over Unix socket / named pipe |
-| `lib/daemon-client.js` | CLI ↔ daemon transport |
+| `lib/daemon-client.js` | Re-export of `@jagannathamv/daemon-client` |
 | `lib/daemon-spawn.js` | Auto-start daemon; restarts on version mismatch |
 | `lib/browser-manager.js` | Named browser profiles, Playwright lifecycle |
 | `lib/session/` | SessionManager, capture pipeline, results schema |
 | `lib/sandbox/` | QuickJS WASM sandbox + Playwright RPC bridge |
 | `lib/report/` | trace decode, report.html, exported Playwright scripts |
-| `lib/viewer/` | Local HTTP session viewer |
-| `lib/protocol.js` | Zod-validated IPC schemas |
+| `lib/viewer/` | Local HTTP session viewer (uses viewer-ui) |
+| `lib/protocol.js` | Re-export of `@jagannathamv/protocol` |
 | `skills/` | Agent skills (`luma-scripting`, `luma-session`, …) |
 | `agents/` | JTBD subagent prompts |
 | `commands/` | Slash commands (`/luma:run`, `/luma:session`, …) |
 | `examples/` | Runnable demo scripts |
-| `create-luma/` | `npm create @jagannathamv/luma` setup wizard (separate npm package) |
+| `create-luma/` | Ink-based `npm create @jagannathamv/luma` wizard |
 | `test/` | Node test runner — unit + optional e2e (Playwright) |
+| `turbo.json` | Turborepo task graph (`npm run build`) |
 
 ## Data directories
 
@@ -59,16 +72,17 @@ Artifacts: ~/.luma-browser/sessions/<id>/
 
 - **ES modules** throughout (`"type": "module"`)
 - **Logging:** `lib/logger.js` for diagnostics; reserve `process.stdout` for CLI/script output
-- **Protocol:** extend `lib/protocol.js` Zod schemas first, then daemon + CLI handlers
+- **Protocol:** extend `packages/protocol` Zod schemas first, then rebuild; `lib/protocol.js` re-exports
 - **Tests:** `node --test`; e2e gated by `LUMA_BROWSER_SKIP_E2E=1`; e2e uses `--test-concurrency=1`
 - **Sandbox limits:** no Node APIs, no callback crossing — document in `skills/luma-scripting/references/REFERENCE.md`
 
 ## Validation
 
 ```bash
+npm run build         # Turborepo — compile TypeScript + Astro viewer
 npm test              # unit tests (no browser required for most)
 npm run test:e2e      # browser e2e (needs Chromium: luma-browser install)
-npm run check         # unit + e2e
+npm run check         # build + unit + e2e
 ```
 
 After changing daemon code locally: `luma-browser stop` then re-run — or rely on auto-restart when CLI version differs from running daemon.

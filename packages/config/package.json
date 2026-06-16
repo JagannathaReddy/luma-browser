@@ -1,0 +1,30 @@
+{
+  "name": "@jagannathamv/config",
+  "version": "0.2.0",
+  "description": "Paths and runtime limits for luma-browser",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./paths": {
+      "types": "./dist/paths.d.ts",
+      "import": "./dist/paths.js"
+    },
+    "./limits": {
+      "types": "./dist/limits.d.ts",
+      "import": "./dist/limits.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

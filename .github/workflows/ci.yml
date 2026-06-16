@@ -19,6 +19,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run build
+
       - run: npm run lint
 
   pack:
@@ -33,6 +35,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - run: npm run build
 
       - run: npm run pack:check
 
