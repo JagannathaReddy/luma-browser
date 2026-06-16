@@ -1,13 +1,13 @@
 
-> @jagannathamv/viewer-ui@0.2.0 build
+> @jagannathamv/viewer-ui@0.2.2 build
 > vite build --config vite.config.mjs && node scripts/copy-render-types.mjs
 
-09:25:55 [WARN] Missing pages directory: src/pages
-09:25:55 [vite] transforming...
-09:25:55 [vite] ✓ 53 modules transformed.
-09:25:55 [vite] rendering chunks...
-09:25:55 [vite] dist/render.css   2.30 kB
-09:25:55 [vite] dist/render.js   82.35 kB
-09:25:55 [vite] dist/render.css   2.30 kB
-09:25:55 [vite] dist/render.js   82.35 kB
-09:25:55 [vite] ✓ built in 197ms
+10:09:58 [WARN] Missing pages directory: src/pages
+10:09:58 [vite] transforming...
+10:09:58 [vite] ✓ 53 modules transformed.
+10:09:58 [vite] rendering chunks...
+10:09:58 [vite] dist/render.css   2.30 kB
+10:09:58 [vite] dist/render.js   82.35 kB
+10:09:58 [vite] dist/render.css   2.30 kB
+10:09:58 [vite] dist/render.js   82.35 kB
+10:09:58 [vite] ✓ built in 186ms

@@ -1,4 +1,4 @@
 
-> @jagannathamv/create-luma@0.2.1 build
+> @jagannathamv/create-luma@0.2.2 build
 > tsc -p tsconfig.json && chmod +x dist/index.js
 

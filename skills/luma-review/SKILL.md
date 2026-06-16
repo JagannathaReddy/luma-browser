@@ -4,7 +4,7 @@ description: Open and triage recorded luma-browser sessions in the local viewer.
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: workflow
   tags:
     - luma-browser

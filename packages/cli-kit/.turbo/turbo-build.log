@@ -1,4 +1,4 @@
 
-> @jagannathamv/cli-kit@0.2.0 build
+> @jagannathamv/cli-kit@0.2.2 build
 > tsc -p tsconfig.json
 

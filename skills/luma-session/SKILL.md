@@ -4,7 +4,7 @@ description: Record a verifiable QA session with luma-browser — explore a flow
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: workflow
   tags:
     - luma-browser

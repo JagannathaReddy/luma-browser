@@ -1,6 +1,6 @@
 {
   "name": "@jagannathamv/luma-browser",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "CLI for controlling browsers with sandboxed JavaScript scripts",
   "type": "module",
   "packageManager": "npm@11.12.1",

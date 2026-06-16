@@ -4,7 +4,7 @@ description: The luma-browser sandbox scripting API for browser automation. Use 
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: reference
   tags:
     - luma-browser

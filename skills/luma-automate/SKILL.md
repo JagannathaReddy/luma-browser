@@ -4,7 +4,7 @@ description: Drive a real browser for a one-off task with luma-browser — navig
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: workflow
   tags:
     - luma-browser

@@ -1,6 +1,6 @@
 {
   "name": "@jagannathamv/cli-kit",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "CLI help text and mode routing for luma-browser",
   "type": "module",
   "exports": {
@@ -9,7 +9,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },

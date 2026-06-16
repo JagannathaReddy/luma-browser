@@ -4,7 +4,7 @@ description: Turn a code change into a prioritized browser-QA plan with luma-bro
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: workflow
   tags:
     - luma-browser

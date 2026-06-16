@@ -2,12 +2,27 @@
 
 ## Unreleased
 
-### Types
+## 0.2.2
 
-- Turn on `strictNullChecks` in `tsconfig.json` so null/undefined misuse is caught at build time
-- Replace every `: any` annotation in `lib/`, `bin/`, `scripts/`, and `create-luma/` with real interfaces, anchored on the published `@jagannathamv/protocol` and `@jagannathamv/daemon-client` types
-- New local type modules: `lib/types.ts`, `lib/session/types.ts`, `lib/daemon/types.ts`, `lib/viewer/types.ts`, `create-luma/lib/types.ts`
-- Deliberate follow-up: `noImplicitAny` remains off — flipping it surfaces ~470 untyped parameters left over from the JS migration and is its own cleanup pass
+### TypeScript migration hardening
+
+- Publish all 8 `@jagannathamv/*` workspace packages in release CI (previously only root + create-luma were published)
+- Delete untyped `lib/line-reader.ts` duplicate; `lib/daemon/server.ts` now imports typed `readLines` from `@jagannathamv/daemon-client`
+- Export `readLines` from `@jagannathamv/daemon-client` public API
+- Complete `lib/cli/help.ts` shim: add `CLI_MODES`, `ENGINE_COMMANDS`, `ORCHESTRATOR_COMMANDS`, `CliMode` type
+- Add `@types/node` devDependency to all workspace packages that use `node:` imports (`config`, `logger`, `daemon-client`, `viewer-ui`, `create-luma`)
+- `sendRequest`: replace `failed` boolean with `settle()` guard to prevent double-resolve; add `message.id` correlation to ignore stray responses
+- Remove unsupported `disabled` prop from `ink-select-input` items; filter unavailable option instead
+
+### Bug fixes
+
+- `postinstall.ts`: fix `projectRoot` path — compiled output lives two levels deep (`dist/scripts/`), not one
+- `capture.ts`: step `dir` in `results.json` now always uses forward-slash (`steps/000`) regardless of OS
+- `stitch-docs.ts`: normalize CRLF → LF on read so `docs:check` does not report false drift on Windows
+- `trace-fidelity.test.ts`: normalize golden fixture to LF before comparing with generated script
+- `session-manager.test.ts`: cross-platform `stepDir` regex (`[/\\]`)
+- `docs-stitch.test.ts`: YAML front-matter regex tolerates `\r\n`
+- `viewer.test.ts`: use `path.resolve()` in expected path to match Windows drive letter
 
 ## 0.2.1
 

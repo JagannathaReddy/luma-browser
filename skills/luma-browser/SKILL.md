@@ -4,7 +4,7 @@ description: Umbrella entry for luma-browser agent plugins. Ships focused skills
 license: MIT
 metadata:
   author: luma-browser
-  version: 0.2.0
+  version: 0.2.2
   category: meta
   tags:
     - luma-browser

@@ -1,6 +1,6 @@
 {
   "name": "luma-browser",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "luma-browser browser automation + recorded QA sessions: sandbox scripting skills, JTBD subagents, slash commands, and rules for verify, automate, session, and review workflows.",
   "author": {
     "name": "luma-browser"

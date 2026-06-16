@@ -9,7 +9,7 @@
       "name": "luma-browser",
       "source": "./",
       "description": "Browser automation + recorded QA sessions: skills, subagents, and /luma:verify | run | session | review commands.",
-      "version": "0.2.0",
+      "version": "0.2.2",
       "category": "developer-tools",
       "tags": [
         "luma-browser",
@@ -20,5 +20,5 @@
       "autoUpdate": true
     }
   ],
-  "version": "0.2.0"
+  "version": "0.2.2"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@jagannathamv/daemon-client",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Typed Unix-socket client for the luma-browser daemon",
   "type": "module",
   "exports": {
@@ -9,7 +9,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
