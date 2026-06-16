@@ -9,9 +9,7 @@
       "import": "./dist/render.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "vite build --config vite.config.mjs && node scripts/copy-render-types.mjs"
   },
