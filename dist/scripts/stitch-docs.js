@@ -9,6 +9,9 @@ const TARGETS = [
     join(root, 'README.md'),
     join(root, '.github', 'copilot-instructions.md'),
 ];
+function normalize(text) {
+    return text.replace(/\r\n/g, '\n');
+}
 function loadSnippets() {
     const snippets = {};
     for (const file of readdirSync(snippetsDir)) {
@@ -16,7 +19,7 @@ function loadSnippets() {
             continue;
         }
         const id = file.replace(/\.md$/, '');
-        snippets[id] = readFileSync(join(snippetsDir, file), 'utf8').trimEnd();
+        snippets[id] = normalize(readFileSync(join(snippetsDir, file), 'utf8')).trimEnd();
     }
     return snippets;
 }
@@ -41,7 +44,8 @@ function main() {
     const snippets = loadSnippets();
     let drift = false;
     for (const target of TARGETS) {
-        const before = readFileSync(target, 'utf8');
+        // Normalize CRLF → LF so Windows checkouts don't cause false drift.
+        const before = normalize(readFileSync(target, 'utf8'));
         const after = stitchContent(before, snippets);
         if (before === after) {
             continue;
